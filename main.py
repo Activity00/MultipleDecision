@@ -5,4 +5,4 @@ Created on 2016年9月29日
 @author: 武明辉
 '''
 print 'HelloWorld'
-print 'fist'
+print 'fista'
