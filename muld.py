@@ -42,7 +42,17 @@ def getData():
 
     return np.mat(lines).astype(int),inedex,TreatmentPlan       
                
-
+def getRmat(data):
+    R=np.zeros((data.shape[0],data.shape[1]))
+    RjMin=np.min(data,0)
+    RjMax=np.max(data,0)
+    for i in range(data.shape[0]):
+        for j in range(data.shape[1]):
+            if j==0 or j==1 or j==4:
+                R[i,j]=RjMin[0,j]*1.0/data[i,j]
+            else:
+                R[i,j]=data[i,j]*1.0/RjMax[0,j]
+    return R
 
 
 #********************数据收集与准备***********
@@ -60,15 +70,7 @@ def getWeights(data):
             
     '''
     #print data
-    R=np.zeros((data.shape[0],data.shape[1]))
-    RjMin=np.min(data,0)
-    RjMax=np.max(data,0)
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            if j==0 or j==1 or j==4:
-                R[i,j]=RjMin[0,j]*1.0/data[i,j]
-            else:
-                R[i,j]=data[i,j]*1.0/RjMax[0,j]
+    R=getRmat(data)
     RjSum=np.sum(R, 0)
     P=R/RjSum
     #print P
@@ -98,15 +100,7 @@ def linearWeightedMethod():
     data,index,TreatmentPlan=getData()
     weights=getWeights(data)
     
-    R=np.zeros((data.shape[0],data.shape[1]))
-    RjMin=np.min(data,0)
-    RjMax=np.max(data,0)
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            if j==0 or j==1 or j==4:
-                R[i,j]=RjMin[0,j]*1.0/data[i,j]
-            else:
-                R[i,j]=data[i,j]*1.0/RjMax[0,j]
+    R=getRmat(data)
     U=np.sum(R*weights,1)
     TreatmentPlan
     result=np.argsort(-U)
@@ -114,4 +108,4 @@ def linearWeightedMethod():
     
 #**********************end*******************
 
-print  linearWeightedMethod()
+
